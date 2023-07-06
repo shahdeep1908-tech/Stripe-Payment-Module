@@ -26,7 +26,7 @@ class ProductPlanModel:
         except (StripeException, Exception) as err:
             response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
             message = str(err)
-            logger.info(f"EXCEPTION OCCURRED WHILE CREATING PRODUCT ::: {err}")
+            logger.error(f"EXCEPTION OCCURRED WHILE CREATING PRODUCT ::: {err}")
         return {'message': message, 'data': data}
 
     @staticmethod
@@ -55,8 +55,21 @@ class ProductPlanModel:
         except (StripeException, Exception) as err:
             response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
             message = str(err)
-            logger.info(f"EXCEPTION OCCURRED WHILE CREATING PLAN ::: {err}")
+            logger.error(f"EXCEPTION OCCURRED WHILE CREATING PLAN ::: {err}")
         return {'message': message, 'data': data}
+
+    @staticmethod
+    def list_plans(response, limit):
+        message, data = "No plans available.", None
+        try:
+            if available_plans := _stripe_payment_handler.list_plans(limit=limit):
+                data = available_plans.data
+                message = "All plans fetched successfully"
+            return {'message': message, 'data': data}
+        except (StripeException, Exception) as err:
+            response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+            message = str(err)
+            logger.error(f"ERROR OCCURRED WHILE LISTING PLANS ::: {err}")
 
 
 class StripePaymentHandler:
@@ -73,6 +86,13 @@ class StripePaymentHandler:
             return Plan.create(product=product_id, nickname=name, amount=amount, interval=interval, currency=currency)
         except StripeError as err:
             raise StripeException(f"Plan not created ::: {err}") from err
+
+    @staticmethod
+    def list_plans(limit):
+        try:
+            return Plan.list(limit=limit)
+        except StripeError as err:
+            raise StripeException(f"Error in Listing Plan ::: {err}") from err
 
 
 _product_plan_model = ProductPlanModel()

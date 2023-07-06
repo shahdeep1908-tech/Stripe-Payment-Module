@@ -1,6 +1,8 @@
 import os
-
+from fastapi.templating import Jinja2Templates
 from pydantic import BaseSettings
+
+templates = Jinja2Templates(directory="templates")
 
 
 class Settings(BaseSettings):

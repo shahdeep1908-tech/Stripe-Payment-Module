@@ -1,6 +1,7 @@
 import stripe
 import uvicorn
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 from routes import router as api_routes
 
 from config import app_setting
@@ -14,7 +15,12 @@ app = FastAPI(title=constants.PROJECT_NAME,
 app.include_router(api_routes)
 
 # StripeKey initializing
-# stripe.api_key = app_setting.STRIPE_API_KEY
+stripe.api_key = app_setting.STRIPE_API_KEY
+
+# Initializing static folder
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
+app.state.stripe_customer_id = None
 
 if __name__ == '__main__':
     uvicorn.run(

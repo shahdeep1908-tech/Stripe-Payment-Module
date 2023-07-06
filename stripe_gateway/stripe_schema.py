@@ -1,7 +1,12 @@
 from _decimal import Decimal
 from enum import Enum
+from typing import List, Optional
 
 from pydantic import BaseModel
+
+
+class ResponseMessage(BaseModel):
+    message: str
 
 
 class ProductRequestSchema(BaseModel):
@@ -35,3 +40,18 @@ class PlanRequestSchema(BaseModel):
     class Config:
         orm_mode = True
         extra = 'forbid'
+
+
+class PlanResponseSchema(BaseModel):
+    id: str
+    product: str
+    nickname: Optional[str]
+    active: bool
+    interval: str
+
+    class Config:
+        orm_mode = True
+
+
+class ListPlanSchema(ResponseMessage):
+    data: Optional[List[PlanResponseSchema]]
