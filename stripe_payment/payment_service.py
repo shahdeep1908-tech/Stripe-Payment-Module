@@ -30,5 +30,4 @@ async def customer_service_portal(app):
         customer=app.state.stripe_customer_id,
         return_url="http://localhost:8000/subscribe"
     )
-    print({"url": session.url})
     return {"url": session.url}
