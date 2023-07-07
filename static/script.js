@@ -1,7 +1,7 @@
 const PREMIUM_PRICE_ID = "plan_ODHIxScelttNth";
 const BASIC_PRICE_ID = "plan_ODHIZ5LeZ0dOBS";
 // Add your Stripe Publishable key
-const stripe = Stripe("pk_test_51LI4LhSF3KacNdMFLSG99Zo0dGSqMgl8XR3smtkMJuoMeuLMXfSPDjzTjodmoEv8GaE1EHUJBSjRJQmfbRFkxUgF00SdDjcA5D");
+const stripe = Stripe("");
 
 const createCheckoutSession = function (priceId) {
     return fetch("/create-checkout-session", {
