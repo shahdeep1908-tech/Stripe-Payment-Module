@@ -14,6 +14,8 @@ class Settings(BaseSettings):
     HOST_URL: str
     HOST_PORT: int
     STRIPE_API_KEY: str
+    STRIPE_WEBHOOK_URL: str
+    STRIPE_WEBHOOK_SECRET: str
 
     class Config:
         env_nested_delimiter = '__'

@@ -14,7 +14,6 @@ def initialize_session():
 @router.get("/subscribe")
 def index(request: Request):
     app = initialize_session()
-    print(app.state.stripe_customer_id)
     return templates.TemplateResponse("index.html",
                                       context={'request': request,
                                                'isCustomer': app.state.stripe_customer_id is not None})

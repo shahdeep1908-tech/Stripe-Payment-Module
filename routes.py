@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from stripe_gateway import stripe_router
 from stripe_payment import payment_router
+from stripe_webhook import webhook_router
 
 router = APIRouter()
 
@@ -12,3 +13,4 @@ def server_checkup():
 
 router.include_router(stripe_router.router)
 router.include_router(payment_router.router)
+router.include_router(webhook_router.router)

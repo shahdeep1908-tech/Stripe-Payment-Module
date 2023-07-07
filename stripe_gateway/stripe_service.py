@@ -65,11 +65,11 @@ class ProductPlanModel:
             if available_plans := _stripe_payment_handler.list_plans(limit=limit):
                 data = available_plans.data
                 message = "All plans fetched successfully"
-            return {'message': message, 'data': data}
         except (StripeException, Exception) as err:
             response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
             message = str(err)
             logger.error(f"ERROR OCCURRED WHILE LISTING PLANS ::: {err}")
+        return {'message': message, 'data': data}
 
 
 class StripePaymentHandler:
