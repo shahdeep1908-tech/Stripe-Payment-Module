@@ -1,6 +1,7 @@
 .env
 .idea
 __pycache__/
+.pytest_cache/
 
 logs/*
 !logs/.gitkeep
