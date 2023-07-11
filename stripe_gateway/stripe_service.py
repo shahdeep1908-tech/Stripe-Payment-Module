@@ -2,7 +2,7 @@ from _decimal import Decimal
 
 from fastapi import status
 from fastapi.encoders import jsonable_encoder
-from stripe import Product, Plan
+from stripe import Product, Plan, Subscription
 from stripe.error import StripeError
 
 from common.app_logger import logger
@@ -71,6 +71,18 @@ class ProductPlanModel:
             logger.error(f"ERROR OCCURRED WHILE LISTING PLANS ::: {err}")
         return {'message': message, 'data': data}
 
+    @staticmethod
+    async def cancel_subscription(sub_id, request, response):
+        message, data = "Subscription recurring payment stop successfully", None
+        try:
+            _stripe_payment_handler.cancel_subscription(sub_id)
+            data = request.reason
+        except (StripeException, Exception) as err:
+            response.status_code = status.HTTP_500_INTERNAL_SERVER_ERROR
+            message = str(err)
+            logger.error(f"ERROR OCCURRED WHILE CANCELLING SUBSCRIPTION ::: {err}")
+        return {'message': message, 'data': data}
+
 
 class StripePaymentHandler:
     @staticmethod
@@ -93,6 +105,13 @@ class StripePaymentHandler:
             return Plan.list(limit=limit)
         except StripeError as err:
             raise StripeException(f"Error in Listing Plan ::: {err}") from err
+
+    @staticmethod
+    def cancel_subscription(sub_id: str):
+        try:
+            return Subscription.delete(sub_id)
+        except StripeError as err:
+            raise StripeException(f"Error in Cancelling Subscription ::: {err}") from err
 
 
 _product_plan_model = ProductPlanModel()

@@ -55,3 +55,17 @@ class PlanResponseSchema(BaseModel):
 
 class ListPlanSchema(ResponseMessage):
     data: Optional[List[PlanResponseSchema]]
+
+
+class CancelSubscriptionSchemaRequest(BaseModel):
+    reason: str
+
+    class Config:
+        orm_mode = True
+
+
+class CancelSubscriptionSchemaResponse(ResponseMessage):
+    data: Optional[str]
+
+    class Config:
+        orm_mode = True

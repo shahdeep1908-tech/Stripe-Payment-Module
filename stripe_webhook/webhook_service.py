@@ -28,7 +28,6 @@ class StripeWebhook:
 
     @staticmethod
     async def stripe_event_handler(event):
-        event_data = event["data"]
         try:
             if event['type'] == 'customer.created':
                 logger.info(f"{'*' * 10}{event['type']}{'*' * 10}")
